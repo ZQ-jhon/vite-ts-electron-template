@@ -1,8 +1,8 @@
 #!/usr/bin/node
 
-const {createServer, build, createLogger} = require('vite');
+const { createServer, build, createLogger } = require('vite');
 const electronPath = require('electron');
-const {spawn} = require('child_process');
+const { spawn } = require('child_process');
 
 
 /** @type 'production' | 'development' | 'test' */
@@ -29,11 +29,11 @@ const sharedConfig = {
  * @param name
  * @returns {Promise<import('vite').RollupOutput | Array<import('vite').RollupOutput> | import('vite').RollupWatcher>}
  */
-const getWatcher = ({name, configFile, writeBundle}) => {
+const getWatcher = ({ name, configFile, writeBundle }) => {
   return build({
     ...sharedConfig,
     configFile,
-    plugins: [{name, writeBundle}],
+    plugins: [{ name, writeBundle }],
   });
 };
 
@@ -62,7 +62,7 @@ const setupMainPackageWatcher = (viteDevServer) => {
 
   return getWatcher({
     name: 'reload-app-on-main-package-change',
-    configFile: 'packages/main/vite.config.js',
+    configFile: 'src/main/vite.config.js',
     writeBundle() {
       if (spawnProcess !== null) {
         spawnProcess.kill('SIGINT');
@@ -71,8 +71,8 @@ const setupMainPackageWatcher = (viteDevServer) => {
 
       spawnProcess = spawn(String(electronPath), ['.']);
 
-      spawnProcess.stdout.on('data', d => d.toString().trim() && logger.warn(d.toString(), {timestamp: true}));
-      spawnProcess.stderr.on('data', d => d.toString().trim() && logger.error(d.toString(), {timestamp: true}));
+      spawnProcess.stdout.on('data', d => d.toString().trim() && logger.warn(d.toString(), { timestamp: true }));
+      spawnProcess.stderr.on('data', d => d.toString().trim() && logger.error(d.toString(), { timestamp: true }));
     },
   });
 };
@@ -86,7 +86,7 @@ const setupMainPackageWatcher = (viteDevServer) => {
 const setupPreloadPackageWatcher = (viteDevServer) => {
   return getWatcher({
     name: 'reload-page-on-preload-package-change',
-    configFile: 'packages/preload/vite.config.js',
+    configFile: 'src/preload/vite.config.js',
     writeBundle() {
       viteDevServer.ws.send({
         type: 'full-reload',
@@ -99,7 +99,7 @@ const setupPreloadPackageWatcher = (viteDevServer) => {
   try {
     const viteDevServer = await createServer({
       ...sharedConfig,
-      configFile: 'packages/renderer/vite.config.js',
+      configFile: 'src/renderer/vite.config.js',
     });
 
     await viteDevServer.listen();

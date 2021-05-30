@@ -7,38 +7,19 @@
     "node": ">=v14.16",
     "npm": ">=7.7"
   },
-  "build": {
-    "appId": "Sky-River-IDE",
-    "win": {
-      "icon": "./buildResources/icon.png",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
-    }
-  },
-  "main": "packages/main/dist/index.cjs",
+  "main": "src/main/dist/index.cjs",
   "description": "Sky-River-IDE",
   "scripts": {
-    "buildEnvTypes": "node scripts/buildEnvTypes.js",
+    "start": "node scripts/watch.js",
     "build": "node scripts/build.js",
     "precompile": "cross-env MODE=production npm run build",
-    "compile": "electron-builder build --config electron-builder.config.js --dir --config.asar=true",
-    "package:mac": "electron-builder --mac --prepackaged dist/packaged",
-    "package:win": "npx electron-builder --windows nsis:ia32 --prepackaged dist/packaged ",
+    "package": "npm run precompile && electron-builder build --config electron-builder.config.js",
     "pretest": "cross-env MODE=test npm run build",
     "test": "node tests/app.spec.js",
-    "watch": "node scripts/watch.js",
     "lint": "eslint . --ext js,ts,vue",
-    "pretypecheck": "npm run buildEnvTypes",
-    "typecheck-main": "tsc --noEmit -p packages/main/tsconfig.json",
-    "typecheck-preload": "tsc --noEmit -p packages/preload/tsconfig.json",
-    "typecheck-renderer": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
+    "typecheck-main": "tsc --noEmit -p src/main/tsconfig.json",
+    "typecheck-preload": "tsc --noEmit -p src/preload/tsconfig.json",
+    "typecheck-renderer": "vue-tsc --noEmit -p src/renderer/tsconfig.json",
     "typecheck": "npm run typecheck-main && npm run typecheck-preload && npm run typecheck-renderer"
   },
   "browserslist": [
