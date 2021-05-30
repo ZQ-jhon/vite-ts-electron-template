@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, nativeImage } from 'electron';
 import {join} from 'path';
 import {URL} from 'url';
 
@@ -41,6 +41,7 @@ const createWindow = async () => {
       contextIsolation: env.MODE !== 'test',   // Spectron tests can't work with contextIsolation: true
       enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
     },
+    icon: nativeImage.createFromPath(__dirname + '../../../buildResources/icon.png'),
   });
 
   /**

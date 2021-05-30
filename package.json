@@ -1,16 +1,36 @@
 {
-  "name": "vite-electron-builder",
+  "name": "Sky-River-IDE",
   "private": true,
+  "author": "ZQ-jhon",
+  "version": "0.0.1",
   "engines": {
     "node": ">=v14.16",
     "npm": ">=7.7"
   },
+  "build": {
+    "appId": "Sky-River-IDE",
+    "win": {
+      "icon": "./buildResources/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    }
+  },
   "main": "packages/main/dist/index.cjs",
+  "description": "Sky-River-IDE",
   "scripts": {
     "buildEnvTypes": "node scripts/buildEnvTypes.js",
     "build": "node scripts/build.js",
     "precompile": "cross-env MODE=production npm run build",
-    "compile": "electron-builder build --config electron-builder.config.js --dir --config.asar=false",
+    "compile": "electron-builder build --config electron-builder.config.js --dir --config.asar=true",
+    "package:mac": "electron-builder --mac --prepackaged dist/packaged",
+    "package:win": "npx electron-builder --windows nsis:ia32 --prepackaged dist/packaged ",
     "pretest": "cross-env MODE=test npm run build",
     "test": "node tests/app.spec.js",
     "watch": "node scripts/watch.js",
